@@ -79,11 +79,11 @@
 </template>
 
 <script>
-import Axios from "axios";
+import Axios from 'axios';
 // import Registration from "../Registration/Registration";
 
 export default {
-    name: "Bar",
+    name: 'Bar',
     // components: {
     //     Registration,
     // },
@@ -100,36 +100,36 @@ export default {
                 lastName: null,
                 password: null,
                 passwordConfirmation: null,
-                email: null,
+                email: null
             },
 
             // ДАННЫЕ ДЛЯ АВТОРИЗАЦИИ -------------------------------
             authoData: {
                 authoLoginEmail: null,
-                authoPassword: null,
-            },
+                authoPassword: null
+            }
         };
     },
     methods: {
         // ОТПРАВКА ДАННЫХ ДЛЯ РЕГИСТРАЦИИ ---------------------------
         sendUser(user) {
             Axios.post(
-                "https://cors-anywhere.herokuapp.com/http://18.217.223.232:3000/sign_up",
+                'https://cors-anywhere.herokuapp.com/http://3.128.24.28:3000/sign_up',
                 {
                     username: user.username,
                     first_name: user.firstName,
                     last_name: user.lastName,
                     password: user.password,
                     password_confirmation: user.passwordConfirmation,
-                    email: user.email,
+                    email: user.email
                 },
                 {
                     headers: {
-                        "Content-Type": "application/json",
-                    },
+                        'Content-Type': 'application/json'
+                    }
                 }
             )
-                .then((response) => {
+                .then(response => {
                     console.log(response);
                 })
                 .catch(function(error) {
@@ -140,28 +140,28 @@ export default {
         // ОТПРАВКА ДАННЫХ ДЛЯ АВТОРИЗАЦИИ ---------------------------
         authoUser(authoData) {
             Axios.post(
-                "https://cors-anywhere.herokuapp.com/http://18.217.223.232:3000/sign_in",
+                'https://cors-anywhere.herokuapp.com/http://3.128.24.28:3000/sign_in',
                 {
                     login: authoData.authoLoginEmail,
-                    password: authoData.authoPassword,
+                    password: authoData.authoPassword
                 },
                 {
                     headers: {
-                        "Content-Type": "application/json",
-                    },
+                        'Content-Type': 'application/json'
+                    }
                 }
             )
-                .then((response) => {
+                .then(response => {
                     console.log(response);
                 })
                 .catch(function(error) {
                     console.log(error);
                 });
-        },
-    },
+        }
+    }
 };
 </script>
 
 <style lang="scss">
-@import "./Bar.scss";
+@import './Bar.scss';
 </style>

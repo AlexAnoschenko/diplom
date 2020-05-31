@@ -3,6 +3,7 @@
         <Bar></Bar>
         <div class="input-block row">
             <q-input
+                @keydown.enter.prevent="getApartments(city)"
                 class="main-input"
                 rounded
                 outlined
@@ -23,49 +24,62 @@
 </template>
 
 <script>
-import Bar from "../components/Bar/Bar";
-import Axios from "axios";
+import ApartmentsMock from 'pages/apartmentsMock';
+import Bar from '../components/Bar/Bar';
+import Axios from 'axios';
 
 export default {
-    name: "PageIndex",
+    name: 'PageIndex',
     components: {
-        Bar,
+        Bar
     },
+
     data() {
         return {
-            city: "london",
+            apartments: null,
+            city: 'london',
+            ex: null
         };
     },
+
     methods: {
         // ОТПРАВКА НАЗВАНИЯ ГОРОДА ---------------------------
-        getApartments(city) {
+        async getApartments(city) {
             if (!city) {
                 return;
             }
-            Axios.get(
-                "https://cors-anywhere.herokuapp.com/https://api.nestoria.co.uk/api?",
+            let response = await Axios.get(
+                'https://cors-anywhere.herokuapp.com/https://api.nestoria.co.uk/api?',
                 {
                     params: {
-                        country: "uk",
+                        country: 'uk',
                         pretty: 1,
-                        action: "search_listings",
-                        encoding: "json",
-                        listing_type: "buy",
-                        place_name: city,
-                    },
+                        action: 'search_listings',
+                        encoding: 'json',
+                        listing_type: 'buy',
+                        place_name: city
+                    }
                 }
             )
-                .then((response) => {
-                    console.log(response);
+                .then(response => {
+                    return response;
                 })
                 .catch(function(error) {
-                    console.log(error);
+                    return 404;
                 });
-        },
+
+            if (response === 404) {
+                this.apartments = ApartmentsMock;
+            } else {
+                this.apartments = response;
+            }
+        }
     },
+
+    mounted() {}
 };
 </script>
 
 <style lang="scss">
-@import "../css/index.scss";
+@import '../css/index.scss';
 </style>
