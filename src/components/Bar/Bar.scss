@@ -1,0 +1,61 @@
+.bar-block {
+    width: 65%;
+    height: 100px;
+    top: 10px;
+    background: #3a3a3a;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 15px;
+    .bar-logo-icon-group {
+        cursor: pointer;
+        .bar-logo {
+            position: absolute;
+            width: 65px;
+            height: 65px;
+            top: 16px;
+            left: 18.1%;
+        }
+        .bar-text {
+            position: absolute;
+            color: white;
+            font-size: 40px;
+            top: 19px;
+            left: 22.1%;
+        }
+    }
+    .registration-text {
+        position: absolute;
+        width: 160px;
+        height: 100px;
+        padding-top: 30px;
+        left: 64.9%;
+        display: flex;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        &:hover {
+            cursor: pointer;
+            background: rgb(90, 90, 90);
+        }
+    }
+    .authorization-text {
+        position: absolute;
+        width: 160px;
+        height: 100px;
+        padding-top: 30px;
+        left: 73.3%;
+        display: flex;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        &:hover {
+            cursor: pointer;
+            background: rgb(90, 90, 90);
+        }
+    }
+}
+
+.registration-block {
+    width: 400px;
+    height: 500px;
+}
