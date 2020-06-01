@@ -1,6 +1,7 @@
 <template>
     <q-page>
         <Bar></Bar>
+
         <div class="input-block row">
             <q-input
                 @keydown.enter.prevent="getApartments(city)"
@@ -11,6 +12,7 @@
                 label="Введите город"
                 bg-color="grey"
             />
+
             <q-btn
                 class="go-button"
                 label="Go!"
@@ -20,6 +22,27 @@
                 @click="getApartments(city)"
             />
         </div>
+
+        <transition-group class="apartments-list-block" name="fade" tag="div">
+            <div
+                class="apartment-item"
+                v-show="apartments"
+                v-for="item in apartmentsList"
+                :key="getId(item.lister_url)"
+            >
+                <!-- <q-icon
+                    class="apartment-img"
+                    :name="`img:${item.img_url}`"
+                ></q-icon> -->
+                <q-card class="my-card">
+                    <q-img :src="item.img_url" basic>
+                        <div class="absolute-bottom text-subtitle2 text-center">
+                            {{ item.title }}
+                        </div>
+                    </q-img>
+                </q-card>
+            </div>
+        </transition-group>
     </q-page>
 </template>
 
@@ -62,6 +85,7 @@ export default {
                 }
             )
                 .then(response => {
+                    console.log('--- Данные пришли ---');
                     return response;
                 })
                 .catch(function(error) {
@@ -70,9 +94,26 @@ export default {
 
             if (response === 404) {
                 this.apartments = ApartmentsMock;
+                console.log(this.apartments);
             } else {
                 this.apartments = response;
             }
+        },
+
+        // Получение ID для key
+        getId(str) {
+            let subStrIndex = str.indexOf('detail-int/') + 11;
+            return str.substr(subStrIndex, 25);
+        }
+    },
+
+    computed: {
+        // Возвращает массив квартир
+        apartmentsList: function() {
+            if (this.apartments) {
+                return this.apartments.response.listings;
+            }
+            return [];
         }
     },
 
