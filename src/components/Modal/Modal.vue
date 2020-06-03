@@ -2,9 +2,30 @@
     <transition name="fade">
         <div
             class="modal-block row justify-center"
-            v-show="MODAL_STATE"
+            v-if="MODAL_STATE"
             @click.self="toggleModal"
         >
+            <q-btn
+                class="favorite-button"
+                round
+                color="deep-orange"
+                icon="add"
+                @click="
+                    addFavorites({
+                        id: CURRENT_USER.id,
+                        currentApartment: CURRENT_APARTMENT
+                    })
+                "
+            />
+
+            <q-btn
+                class="delete-favorite-button"
+                round
+                color="deep-orange"
+                icon="remove"
+                @click="deleteFavorites(11)"
+            />
+
             <div class="modal-window column">
                 <div class="row">
                     <q-img
@@ -59,20 +80,29 @@ export default {
 
     data() {
         return {
-            name: 'map'
+            name: 'map',
+            favoriteButton: 'add'
         };
     },
 
     methods: {
-        ...mapActions(['TOGGLE_MODAL']),
+        ...mapActions(['TOGGLE_MODAL', 'ADD_FAVORITES', 'DELETE_FAVORITES']),
 
         toggleModal() {
             this.TOGGLE_MODAL();
+        },
+
+        addFavorites({ id, currentApartment }) {
+            this.ADD_FAVORITES({ id, currentApartment });
+        },
+
+        deleteFavorites(id) {
+            this.DELETE_FAVORITES(id);
         }
     },
 
     computed: {
-        ...mapGetters(['MODAL_STATE', 'CURRENT_APARTMENT'])
+        ...mapGetters(['MODAL_STATE', 'CURRENT_APARTMENT', 'CURRENT_USER'])
     },
 
     mounted() {}

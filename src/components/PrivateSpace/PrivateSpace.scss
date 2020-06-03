@@ -1,0 +1,57 @@
+.private-block {
+    margin: 0 auto;
+    width: 1200px;
+
+    .private-window {
+        padding: 16px;
+        width: 100%;
+        margin-top: 16px;
+        background: rgb(39, 39, 39);
+        border-radius: 16px;
+        display: flex;
+        justify-content: center;
+
+        .private-head {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 30px;
+            background: black;
+            border-radius: 16px;
+
+            .head-left {
+                padding: 16px;
+                padding-left: 60px;
+                width: 50%;
+
+                .head-left-icon {
+                    width: 110px;
+                    height: 110px;
+                }
+
+                .head-left-text {
+                    margin-top: 20px;
+                    margin-left: 16px;
+                    color: white;
+                    height: 100%;
+                    font-size: 50px;
+                }
+            }
+
+            .head-right {
+                padding-top: 18px;
+                padding-left: 130px;
+                width: 50%;
+                color: white;
+                font-size: 24px;
+            }
+        }
+
+        .favorites-list {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 16px;
+            background: rgb(17, 17, 17);
+            border-radius: 16px;
+        }
+    }
+}

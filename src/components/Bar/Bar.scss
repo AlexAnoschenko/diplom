@@ -4,7 +4,7 @@
     top: 10px;
     background: #3a3a3a;
     margin: auto;
-    margin-top: 10px;
+    margin-top: 20px;
     border-radius: 15px;
     .bar-logo-icon-group {
         cursor: pointer;
@@ -56,6 +56,16 @@
 }
 
 .registration-block {
+    padding: 16px;
     width: 400px;
-    height: 500px;
+    border-radius: 16px;
+
+    .input-data {
+        margin-bottom: 16px;
+    }
+}
+
+.registration-button {
+    width: 100%;
+    border-radius: 16px;
 }

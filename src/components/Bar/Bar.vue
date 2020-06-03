@@ -7,49 +7,77 @@
             ></q-icon>
             <span class="bar-text">ENGLISH FLATS</span>
         </div>
-        <div class="registration-text" @click="registration = true">
-            Регистрация
+        <div v-if="!CURRENT_USER.id">
+            <div class="registration-text" @click="registration = true">
+                Регистрация
+            </div>
+            <div class="authorization-text" @click="authorization = true">
+                Авторизация
+            </div>
         </div>
-        <div class="authorization-text" @click="authorization = true">
-            Авторизация
+
+        <div
+            class="authorization-text"
+            v-if="CURRENT_USER.id"
+            @click="logoutUser"
+        >
+            Выйти
         </div>
-        <!-- <Registration></Registration> -->
 
         <!-- ФОРМА РЕГИСТРАЦИИ ------------------------------------------------------------->
         <q-dialog v-model="registration">
             <q-card class="registration-block">
-                <q-input filled square v-model="user.username" hint="Login" />
                 <q-input
-                    filled
-                    square
+                    class="input-data"
+                    rounded
+                    outlined
+                    v-model="user.username"
+                    label="Login"
+                />
+                <q-input
+                    class="input-data"
+                    rounded
+                    outlined
                     v-model="user.firstName"
-                    hint="First name"
+                    label="First name"
                 />
                 <q-input
-                    filled
-                    square
+                    class="input-data"
+                    rounded
+                    outlined
                     v-model="user.lastName"
-                    hint="Last name"
+                    label="Last name"
                 />
                 <q-input
+                    class="input-data"
+                    rounded
+                    outlined
                     v-model="user.password"
-                    filled
                     type="password"
-                    hint="Password"
+                    label="Password"
                 />
                 <q-input
+                    class="input-data"
+                    rounded
+                    outlined
                     v-model="user.passwordConfirmation"
-                    filled
                     type="password"
-                    hint="Password"
+                    label="Password Confirmation"
                 />
                 <q-input
+                    class="input-data"
+                    rounded
+                    outlined
                     v-model="user.email"
-                    filled
                     type="email"
-                    hint="Email"
+                    label="Email"
                 />
-                <q-btn color="primary" label="Send" @click="sendUser(user)" />
+                <q-btn
+                    class="registration-button"
+                    color="primary"
+                    label="Send"
+                    @click="sendUser(user)"
+                />
             </q-card>
         </q-dialog>
 
@@ -66,12 +94,18 @@
                     filled
                     square
                     v-model="authoData.authoPassword"
+                    type="password"
                     hint="Password"
                 />
                 <q-btn
                     color="primary"
                     label="Enter"
-                    @click="authoUser(authoData)"
+                    @click="
+                        loginUser({
+                            login: authoData.authoLoginEmail,
+                            password: authoData.authoPassword
+                        })
+                    "
                 />
             </q-card>
         </q-dialog>
@@ -80,13 +114,11 @@
 
 <script>
 import Axios from 'axios';
-// import Registration from "../Registration/Registration";
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: 'Bar',
-    // components: {
-    //     Registration,
-    // },
+
     data() {
         return {
             // ФОРМЫ ------------------------------------------------
@@ -137,27 +169,22 @@ export default {
                 });
         },
 
-        // ОТПРАВКА ДАННЫХ ДЛЯ АВТОРИЗАЦИИ ---------------------------
-        authoUser(authoData) {
-            Axios.post(
-                'https://cors-anywhere.herokuapp.com/http://3.128.24.28:3000/sign_in',
-                {
-                    login: authoData.authoLoginEmail,
-                    password: authoData.authoPassword
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            )
-                .then(response => {
-                    console.log(response);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
+        ...mapActions(['LOGIN_USER', 'LOGOUT_USER']),
+
+        loginUser({ login, password }) {
+            this.LOGIN_USER({
+                login,
+                password
+            });
+        },
+
+        logoutUser() {
+            this.LOGOUT_USER();
         }
+    },
+
+    computed: {
+        ...mapGetters(['CURRENT_USER'])
     }
 };
 </script>
