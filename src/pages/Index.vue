@@ -26,14 +26,11 @@
         <transition-group class="apartments-list-block" name="fade" tag="div">
             <div
                 class="apartment-item"
-                v-show="apartments"
-                v-for="item in apartmentsList"
+                v-show="APARTMENTS_STATE"
+                v-for="item in APARTMENTS_STATE"
                 :key="getId(item.lister_url)"
+                @click="toggleModal(item)"
             >
-                <!-- <q-icon
-                    class="apartment-img"
-                    :name="`img:${item.img_url}`"
-                ></q-icon> -->
                 <q-card class="my-card">
                     <q-img :src="item.img_url" basic>
                         <div class="absolute-bottom text-subtitle2 text-center">
@@ -43,78 +40,53 @@
                 </q-card>
             </div>
         </transition-group>
+
+        <Modal></Modal>
     </q-page>
 </template>
 
 <script>
-import ApartmentsMock from 'pages/apartmentsMock';
 import Bar from '../components/Bar/Bar';
-import Axios from 'axios';
+import Modal from '../components/Modal/Modal';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: 'PageIndex',
     components: {
-        Bar
+        Bar,
+        Modal
     },
 
     data() {
         return {
-            apartments: null,
-            city: 'london',
-            ex: null
+            city: 'London'
         };
     },
 
     methods: {
-        // ОТПРАВКА НАЗВАНИЯ ГОРОДА ---------------------------
-        async getApartments(city) {
-            if (!city) {
-                return;
-            }
-            let response = await Axios.get(
-                'https://cors-anywhere.herokuapp.com/https://api.nestoria.co.uk/api?',
-                {
-                    params: {
-                        country: 'uk',
-                        pretty: 1,
-                        action: 'search_listings',
-                        encoding: 'json',
-                        listing_type: 'buy',
-                        place_name: city
-                    }
-                }
-            )
-                .then(response => {
-                    console.log('--- Данные пришли ---');
-                    return response;
-                })
-                .catch(function(error) {
-                    return 404;
-                });
-
-            if (response === 404) {
-                this.apartments = ApartmentsMock;
-                console.log(this.apartments);
-            } else {
-                this.apartments = response;
-            }
-        },
-
-        // Получение ID для key
+        // Получение ID для key ---------------------------------------------------
         getId(str) {
             let subStrIndex = str.indexOf('detail-int/') + 11;
             return str.substr(subStrIndex, 25);
+        },
+
+        // Получение экшенов из стора ----------------------------------------------
+        ...mapActions(['TOGGLE_MODAL', 'GET_APARTMENTS']),
+
+        // Открыть\закрыть модалку
+        toggleModal(apartnemt) {
+            this.TOGGLE_MODAL(apartnemt);
+        },
+
+        // Запрос на сервер
+        getApartments(city) {
+            this.GET_APARTMENTS(city);
         }
     },
 
     computed: {
-        // Возвращает массив квартир
-        apartmentsList: function() {
-            if (this.apartments) {
-                return this.apartments.response.listings;
-            }
-            return [];
-        }
+        // Получение геттеров из стора
+        ...mapGetters(['MODAL_STATE', 'APARTMENTS_STATE'])
     },
 
     mounted() {}
