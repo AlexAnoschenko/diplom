@@ -1,5 +1,7 @@
+@import "./background.scss";
+
 body {
-    background: rgba(65, 65, 65, 0.88);
+    background: rgb(24, 24, 24);
 }
 
 .fade-enter-active,
@@ -8,6 +10,18 @@ body {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
     opacity: 0;
+}
+
+.delete-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+
+.delete-fav-button {
+    position: fixed;
+    top: 60px;
+    left: 10px;
 }
 
 .modal {
