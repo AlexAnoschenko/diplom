@@ -1,29 +1,87 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import Axios from 'axios';
+import ApartmentsMock from '../pages/apartmentsMock';
 
-// import example from './module-example'
+Vue.use(Vuex);
 
-Vue.use(Vuex)
+export default function(/* { ssrContext } */) {
+    const Store = new Vuex.Store({
+        state: {
+            isModalOpen: false,
+            apartments: null,
+            currentApartment: null
+        },
 
-/*
- * If not building with SSR mode, you can
- * directly export the Store instantiation;
- *
- * The function below can be async too; either use
- * async/await or return a Promise which resolves
- * with the Store instance.
- */
+        mutations: {
+            CHANGE_MODAL: (state, payload) => {
+                if (payload) {
+                    state.isModalOpen = !state.isModalOpen;
+                    state.currentApartment = payload;
+                } else {
+                    state.isModalOpen = !state.isModalOpen;
+                }
+            },
 
-export default function (/* { ssrContext } */) {
-  const Store = new Vuex.Store({
-    modules: {
-      // example
-    },
+            CHANGE_APARTMENTS: (state, payload) => {
+                state.apartments = payload;
+            }
+        },
 
-    // enable strict mode (adds overhead!)
-    // for dev mode only
-    strict: process.env.DEV
-  })
+        actions: {
+            TOGGLE_MODAL({ commit }, payload) {
+                commit('CHANGE_MODAL', payload);
+            },
 
-  return Store
+            async GET_APARTMENTS({ commit }, payload) {
+                if (!payload) {
+                    return;
+                }
+                let response = await Axios.get(
+                    'https://cors-anywhere.herokuapp.com/https://api.nestoria.co.uk/api?',
+                    {
+                        params: {
+                            country: 'uk',
+                            pretty: 1,
+                            action: 'search_listings',
+                            encoding: 'json',
+                            listing_type: 'buy',
+                            place_name: payload
+                        }
+                    }
+                )
+                    .then(response => {
+                        return response;
+                    })
+                    .catch(() => {
+                        return 404;
+                    });
+
+                if (response === 404) {
+                    commit(
+                        'CHANGE_APARTMENTS',
+                        ApartmentsMock.response.listings
+                    );
+                } else {
+                    commit('CHANGE_APARTMENTS', response.response.listings);
+                }
+            }
+        },
+
+        getters: {
+            MODAL_STATE(state) {
+                return state.isModalOpen;
+            },
+
+            APARTMENTS_STATE(state) {
+                return state.apartments;
+            },
+
+            CURRENT_APARTMENT(state) {
+                return state.currentApartment;
+            }
+        }
+    });
+
+    return Store;
 }
